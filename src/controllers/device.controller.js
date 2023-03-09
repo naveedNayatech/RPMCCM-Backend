@@ -121,6 +121,13 @@ const forwardtelemetry = catchAsync(async (req, res) => {
   res.status(httpStatus.CREATED).send( forwardtelemetry );
 });
 
+
+const mioConnectData = catchAsync(async (req, res) => {
+  const telemetaryData = await deviceService.dataFromMioConnect(req, res, next);
+  res.status(httpStatus.CREATED).send( telemetaryData );
+});
+
+
 const deviceBatteryStats = catchAsync(async (req, res) => {
   const batteryStats = await deviceService.getBatteryStats(req.body);
   res.status(httpStatus.CREATED).send( batteryStats );
@@ -148,7 +155,6 @@ const listcollectUncollect = catchAsync(async (req, res) => {
 
 
 
-
 module.exports = {
   add,
   update,
@@ -168,5 +174,6 @@ module.exports = {
   getDeviceSignal,
   getAllDeviceSignals,
   addHistory,
-  getDeviceHistory
+  getDeviceHistory,
+  mioConnectData
 };

@@ -529,6 +529,91 @@ const devicetelemetry = async (deviceId, body) => {
 const forwardtelemetry = async (body) => {
   
   let insertIntoDeviceData, device, patient;
+  return body;
+  
+
+  // return
+//   device = await Device.findById(body.deviceId).lean();
+  
+//   if (device)
+//     patient = await Patient.findOne({ "assigned_devices.deviceObjectId": device._id })
+//       .populate("assigned_doctor_id")
+//       .populate("assigned_hr_id")
+//       .lean()
+//   else
+//     throw new ApiError(httpStatus.NOT_FOUND, 'device not found');
+
+//   if (patient === null) {
+//     throw new ApiError(httpStatus.NOT_FOUND, 'patient not found cannot insert data');
+//   }
+
+//     insertIntoDeviceData = await HealthData.create({
+//       assigned_patient_id: patient._id,
+//       deviceId: device._id,
+//       telemetaryData: body.data,
+//       dateAdded: moment(new Date()).format("YYYY/MM/DD"),
+//       time: moment(new Date(), "HH:mm:ss").format("HH:MM")
+//     })
+
+//     return insertIntoDeviceData;
+ }
+
+ 
+ const _dataFromMioConnect = async (body) => {
+  console.log(`Receive data from MioConnect: ${JSON.stringify(body)})`);
+
+  let insertIntoDeviceData, device, patient;
+
+  device = await Device.findById(body.deviceId).lean();
+  
+  if (device)
+    patient = await Patient.findOne({ "assigned_devices.deviceObjectId": device._id })
+      .populate("assigned_doctor_id")
+      .populate("assigned_hr_id")
+      .lean()
+  else
+    throw new ApiError(httpStatus.NOT_FOUND, 'device not found');
+
+  if (patient === null) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'patient not found cannot insert data');
+  }
+
+    insertIntoDeviceData = await HealthData.create({
+      assigned_patient_id: patient._id,
+      deviceId: device._id,
+      telemetaryData: JSON.stringify(body.data),
+      dateAdded: moment(new Date()).format("YYYY/MM/DD"),
+      time: moment(new Date(), "HH:mm:ss").format("HH:MM")
+    })
+
+    return insertIntoDeviceData;
+
+  // const result = {
+  //     success: true
+  // }
+  // return result;
+}
+
+const dataFromMioConnect = async (req, res, next) => {
+  // verify token from request if needed
+  const { body, ticket } = req;
+
+  try {
+      const result = await _dataFromMioConnect(body);
+      res.json(result);
+  } catch (err) {
+      console.log(err)
+      // MioConnect will try to resend if returns error, e.g. HTTP 400 etc.
+      let status = err.code;
+      return res.status(status).json(err);
+  }
+}
+
+
+ 
+ const rcvdDataFromMioConnect = async (body) => {
+  
+  let insertIntoDeviceData, device, patient;
 
   device = await Device.findById(body.deviceId).lean();
   if (device)
@@ -555,7 +640,8 @@ const forwardtelemetry = async (body) => {
     return insertIntoDeviceData;
  }
 
- 
+
+
  const getBatteryStats = async (body) => {
   let insertIntoDeviceSignal, device, patient;
 
@@ -618,7 +704,8 @@ module.exports = {
   getSpecificBatterySignal,
   getAllBatterySignal,
   createDeviceHistory,
-  deviceHistoryList
+  deviceHistoryList,
+  dataFromMioConnect
 };
 
 
