@@ -122,12 +122,6 @@ const forwardtelemetry = catchAsync(async (req, res) => {
 });
 
 
-const mioConnectData = catchAsync(async (req, res) => {
-  const telemetaryData = await deviceService.dataFromMioConnect(req, res, next);
-  res.status(httpStatus.CREATED).send( telemetaryData );
-});
-
-
 const deviceBatteryStats = catchAsync(async (req, res) => {
   const batteryStats = await deviceService.getBatteryStats(req.body);
   res.status(httpStatus.CREATED).send( batteryStats );
@@ -174,6 +168,5 @@ module.exports = {
   getDeviceSignal,
   getAllDeviceSignals,
   addHistory,
-  getDeviceHistory,
-  mioConnectData
+  getDeviceHistory
 };

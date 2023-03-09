@@ -21,15 +21,15 @@ router.route('/stats').get(auth('devices'),deviceController.deviceStats);
 router.route('/healthDataByDeviceId').get(auth('devices'),deviceController.healthDataByDeviceId);
 
 //Mio devices api's for theDoctorsWeb
-router.post('/DeviceCert', deviceController.DeviceCert);
-router.post('/devicetelemetry/:deviceparam', deviceController.devicetelemetry);
+// router.post('/DeviceCert', deviceController.DeviceCert);
+// router.post('/devicetelemetry/:deviceparam', deviceController.devicetelemetry);
 // router.post('/forwardtelemetry', deviceController.forwardtelemetry);
 // router.post('/forwardstatus', deviceController.deviceBatteryStats);
+
 router.get('/getDeviceSignal/:deviceId', deviceController.getDeviceSignal);
 router.get('/getAllDevicesSignals', deviceController.getAllDeviceSignals);
 
 //Mio devices api's for theDoctorsWeb
-// router.post('/forwardtelemetry?token=security', deviceController.mioConnectData);
 router.post('/devicecert', deviceController.DeviceCert);
 router.post('/forwardtelemetry', deviceController.forwardtelemetry);
 router.post('/forwardstatus', deviceController.deviceBatteryStats);
