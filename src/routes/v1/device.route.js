@@ -31,7 +31,7 @@ router.get('/getAllDevicesSignals', deviceController.getAllDeviceSignals);
 //Mio devices api's for theDoctorsWeb
 // router.post('/forwardtelemetry?token=security', deviceController.mioConnectData);
 router.post('/devicecert', deviceController.DeviceCert);
-router.post('/forwardtelemetary', deviceController.forwardtelemetry);
+router.post('/forwardtelemetry', deviceController.forwardtelemetry);
 router.post('/forwardstatus', deviceController.deviceBatteryStats);
 
 
